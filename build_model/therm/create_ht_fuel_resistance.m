@@ -50,8 +50,6 @@ init = model.physics('ht_fuel').feature('init1');
 [k_fuel, cp_fuel, rho_fuel] = calc_pb_thermal_properties();
 [k_gr, cp_gr, rho_gr] = calc_gr_properties();
 
-k_g_core = 193;
-k_g_shell = 193;
 
 % %% set matrix c
 k=0;
@@ -85,13 +83,13 @@ for n=1:pebbles_region
             case 'Mk1'
                 % graphit core
                 if n==1
-                    cfeq.setIndex('a', [num2str(k_g_core),'*4*pi*r',num2str(n+1),...
+                    cfeq.setIndex('a', [num2str(k_gr),'*4*pi*r',num2str(n+1),...
                         '*r',num2str(n),'/(r',num2str(n+1),'-r',num2str(n),')'],k);
                     k=k+region_coated+region_fuel_kernel+pebbles_region;
                     
                     %For Tp24
                     kk=k+(pebbles_region+region_coated+region_fuel_kernel-1)*3-1;
-                    cfeq.setIndex('a', [num2str(k_g_core),'*(-4)*pi*r',num2str(n+1),...
+                    cfeq.setIndex('a', [num2str(k_gr),'*(-4)*pi*r',num2str(n+1),...
                         '*r',num2str(n),'/(r',num2str(n+1),'-r',num2str(n),')'],kk);
                     
                     % fuel pebbles layer
@@ -351,9 +349,9 @@ for n=1:pebbles_region
                             ],k);
                     else
                         if n==1
-                            cfeq.setIndex('f',num2str(0),k)
+                            cfeq.setIndex('f',num2str(0),k);
                         elseif n<pebbles_region
-                            cfeq.setIndex('f',num2str(0),k)
+                            cfeq.setIndex('f',num2str(0),k);
                         end
                         
                     end
@@ -362,16 +360,16 @@ for n=1:pebbles_region
                 
             case 'Mk1'
                 if n==1
-                    cfeq.setIndex('f',num2str(0),k)
+                    cfeq.setIndex('f',num2str(0),k);
                     k=k+1;
                 else
                     for m=1:region_coated+region_fuel_kernel
                         if m<region_coated+region_fuel_kernel
-                            cfeq.setIndex('f',['PdensityN/0.6*4/3*(pb_diam/2)^3*pi/triso_nb/3'...
-                                ],k);
+                            cfeq.setIndex('f', ['PdensityN/0.6*4/3*(pb_diam/2)^3*pi/triso_nb/3'...
+                                ], k);
                         else
                             if n<pebbles_region
-                                cfeq.setIndex('f',num2str(0),k)
+                                cfeq.setIndex('f', num2str(0), k);
                             end
                             
                         end
@@ -406,7 +404,7 @@ for i=1:pebbles_region
                 end
         end
     else
-        init.set(['Tp', num2str(i)], 900)
+        init.set(['Tp', num2str(i)], 900);
     end
 end
 
